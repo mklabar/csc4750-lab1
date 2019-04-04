@@ -1,6 +1,6 @@
 from socket import *
 
-MAX_CLIENTS = 3 
+MAX_CLIENTS = 2 
 
 #setup socket to wait for connections
 serverPort = 43500
