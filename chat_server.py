@@ -20,23 +20,32 @@ for i in range(0, MAX_CLIENTS):
         print("Stranger", i+1, "connected")
 
 #omitting while loop means the server will run once!
-sender = 0
+
 for i in range(0, MAX_CLIENTS):
     clients[i][0].send(b"Welcome to the chatroom!\nType 'quit' to exit")
 
-msg = clients[0][0].recv(1024)
-sender = 0  
+sender = 0
+msg = ""
+while True:
+    clients[sender][0].send(b"1")
+    msg = clients[sender][0].recv(1024)
+    
+    if msg.decode("utf-8") is "quit":
+        break
 
-while msg.decode("utf-8") != "quit":
     for i in range(0, MAX_CLIENTS):
         if i is not sender:
+            clients[i][0].send(b"0")
             clients[i][0].send(msg)
-            msg = clients[i][0].recv(1024)
-            sender = i
+    
+    sender += 1
+    if sender == MAX_CLIENTS:
+        sender = 0
 
 for i in range(0, MAX_CLIENTS):
     print("Stranger", i+1, "disconnected")
-    clients[i][0].send(b"You have disconnected from the chatroom")
+    clients[i][0].send(b"-1")
+    clients[i][0].send(b"You have disconnected been from the chatroom")
     clients[i][0].close()
     exit()
 
