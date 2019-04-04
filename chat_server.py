@@ -1,6 +1,6 @@
 from socket import *
 
-MAX_CLIENTS = 2
+MAX_CLIENTS = 3 
 
 #setup socket to wait for connections
 serverPort = 43500
@@ -30,11 +30,11 @@ while True:
     clients[sender][0].send(b"1")
     msg = clients[sender][0].recv(1024)
     
-    if msg.decode("utf-8") is "quit":
+    if msg.decode("utf-8") == "quit":
         break
 
     for i in range(0, MAX_CLIENTS):
-        if i is not sender:
+        if i != sender:
             clients[i][0].send(b"0")
             clients[i][0].send(msg)
     
@@ -45,8 +45,9 @@ while True:
 for i in range(0, MAX_CLIENTS):
     print("Stranger", i+1, "disconnected")
     clients[i][0].send(b"-1")
-    clients[i][0].send(b"You have disconnected been from the chatroom")
+    clients[i][0].send(b"You have been disconnected from the chatroom")
     clients[i][0].close()
-    exit()
+
+exit()
 
 
