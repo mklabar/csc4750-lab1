@@ -13,8 +13,8 @@ print(message)
 while True:
     #server passes 1/True if client is sender
     #passes 0/False if client is receiver
-    flag = int(clientSocket.recv(1024))
-    if flag == -1:
+    flag = int(clientSocket.recv(1))
+    if flag == 2:
         break
     sender = flag == 1
 

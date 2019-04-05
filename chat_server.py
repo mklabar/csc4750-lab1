@@ -44,7 +44,7 @@ while True:
 
 for i in range(0, MAX_CLIENTS):
     print("Stranger", i+1, "disconnected")
-    clients[i][0].send(b"-1")
+    clients[i][0].send(b"2")
     clients[i][0].send(b"You have been disconnected from the chatroom")
     clients[i][0].close()
 
