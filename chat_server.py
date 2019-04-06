@@ -1,5 +1,7 @@
 from socket import *
 from struct import *
+import random
+import time
 MAX_CLIENTS = 2 
 
 #setup socket to wait for connections
@@ -11,6 +13,18 @@ serverSocket.listen(1)
 print('The server is ready to accept clients')
 
 clients = []
+quotes = ["Who's ready to fly on a zipline? I am!",
+ "Shut up baby I know it!",
+ "Bwee, hoo hoo, bwoo.",
+ "I'm sorry Dave. I just can't do that.",
+ "Error 404: Sarcasm module not found",
+ "Don't you call me a mindless philosopher you overweight glob of grease!",
+ "Would you like more butter?",
+ "VOIP",
+ "Be... Good...",
+ "Autobots, roll out!",
+ "DANGER WILL ROBINSON",
+ "At least ~your~ keyboard is dry",]
 #accept up to two connections from clients, which
 # must connect before we can move on
 for i in range(0, MAX_CLIENTS):
@@ -26,23 +40,32 @@ for i in range(0, MAX_CLIENTS):
 
 sender = 0
 msg = ""
+random.seed()
 while True:
 	clients[sender][0].send(b"1")
-	msg_len = int.from_bytes(clients[sender][0].recv(4), 'big')
-	msg = clients[sender][0].recv(msg_len)
+	#msg_len = int.from_bytes(clients[sender][0].recv(4), 'big')
+	#msg = clients[sender][0].recv(msg_len)
+	msg = clients[sender][0].recv(1024)
 	msg_dc = msg.decode("utf-8")
+	
 	if msg_dc == "quit":
 		break
-	if msg_dc[0] == "!":
-		break
-    
-
+	
 	for i in range(0, MAX_CLIENTS):
 		if i != sender:
 			clients[i][0].send(b"0")
-			clients[i][0].send(bytes([msg_len & 0xFFFFFFFF]))
+			#clients[i][0].send(bytes([msg_len & 0xFFFFFFFF]))
 			clients[i][0].send(msg)
-    
+			time.sleep(.01)
+	
+	if msg_dc[0:5] == "!bot ":
+		if "quote" in msg_dc:
+			quote = quotes[random.randint(0,11)]
+			for i in range(0, MAX_CLIENTS):
+				clients[i][0].send(b"3")
+				clients[i][0].sendall(quote.encode("utf-8"))
+				time.sleep(.01)
+	
 	sender += 1
 	if sender == MAX_CLIENTS:
 		sender = 0
