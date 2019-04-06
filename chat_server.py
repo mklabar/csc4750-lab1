@@ -1,6 +1,6 @@
 from socket import *
-
-MAX_CLIENTS = 3 
+from struct import *
+MAX_CLIENTS = 2 
 
 #setup socket to wait for connections
 serverPort = 43500
@@ -27,26 +27,31 @@ for i in range(0, MAX_CLIENTS):
 sender = 0
 msg = ""
 while True:
-    clients[sender][0].send(b"1")
-    msg = clients[sender][0].recv(1024)
+	clients[sender][0].send(b"1")
+	msg_len = int.from_bytes(clients[sender][0].recv(4), 'big')
+	msg = clients[sender][0].recv(msg_len)
+	msg_dc = msg.decode("utf-8")
+	if msg_dc == "quit":
+		break
+	if msg_dc[0] == "!":
+		break
     
-    if msg.decode("utf-8") == "quit":
-        break
 
-    for i in range(0, MAX_CLIENTS):
-        if i != sender:
-            clients[i][0].send(b"0")
-            clients[i][0].send(msg)
+	for i in range(0, MAX_CLIENTS):
+		if i != sender:
+			clients[i][0].send(b"0")
+			clients[i][0].send(bytes([msg_len & 0xFFFFFFFF]))
+			clients[i][0].send(msg)
     
-    sender += 1
-    if sender == MAX_CLIENTS:
-        sender = 0
+	sender += 1
+	if sender == MAX_CLIENTS:
+		sender = 0
 
 for i in range(0, MAX_CLIENTS):
-    print("Stranger", i+1, "disconnected")
-    clients[i][0].send(b"2")
-    clients[i][0].send(b"You have been disconnected from the chatroom")
-    clients[i][0].close()
+	print("Stranger", i+1, "disconnected")
+	clients[i][0].send(b"2")
+	clients[i][0].send(b"You have been disconnected from the chatroom")
+	clients[i][0].close()
 
 exit()
 
