@@ -23,10 +23,10 @@ quotes = ["Who's ready to fly on a zipline? I am!",
  "Error 404: Sarcasm module not found",
  "Don't you call me a mindless philosopher you overweight glob of grease!",
  "Would you like more butter?",
- "VOIP",
+ "VOIP!",
  "Be... Good...",
  "Autobots, roll out!",
- "DANGER WILL ROBINSON",
+ "DANGER, WILL ROBINSON!",
  "At least ~your~ keyboard is dry",]
 #accept up to two connections from clients, which
 # must connect before we can move on
@@ -39,7 +39,7 @@ for i in range(0, MAX_CLIENTS):
 #omitting while loop means the server will run once!
 
 for i in range(0, MAX_CLIENTS):
-    clients[i][0].send(b"Welcome to the chatroom!\nType 'quit' to exit")
+    clients[i][0].send(b"Welcome to the chatroom!\nType '/help' for a list of commands")
 
 sender = 0
 msg = ""
@@ -51,32 +51,47 @@ while True:
 	msg = clients[sender][0].recv(1024)
 	msg_dc = msg.decode("utf-8")
 	
-	if msg_dc == "quit":
-		break
-	
-	for i in range(0, MAX_CLIENTS):
-		if i != sender:
-			clients[i][0].send(b"0")
-			#clients[i][0].send(bytes([msg_len & 0xFFFFFFFF]))
-			clients[i][0].send(msg)
-			time.sleep(.01)
-	
-	if msg_dc[0:5] == "!bot ":
-		if "quote" in msg_dc:
-			msg = quotes[random.randint(0,11)]
-		elif "time" in msg_dc:
-			msg = str(datetime.datetime.now())
+	if msg_dc[0] == "/" or msg_dc[0] == "!":
+		flag = "3"
+		if msg_dc == "/quit":
+			break
+		elif msg_dc == "/help":
+			msg = "\n\tCommands:\n\n\t\t/help\tdisplays the list of commands\
+			\n\t\t/quit\tdisconnects all clients from the server\
+			\n\n\tBot Commands:\n\n\t\t!bot quote\tChatty Bot says a famous robot quote\
+			\n\t\t!bot time\tChatty Bot tells the current time\n"
+		elif msg_dc[0:5] == "!bot ":
+			flag = "4"
+			if "quote" in msg_dc:
+				msg = quotes[random.randint(0,11)]
+			elif "time" in msg_dc:
+				msg = "The current time is " + datetime.datetime.now().strftime("%I:%M %p")
+			
+			#elif "spellcheck" goes here
+				#do spellcheck stuff
+				#msg = blah
+				
+			else:
+				msg = "I'm sorry, I don't know that command yet!\
+				Type '/help' for a list of commands"
+		else:
+			msg = "Command does not exist. Type '/help' for a list of commmands"
+		
 		for i in range(0, MAX_CLIENTS):
-			clients[i][0].send(b"3")
+			clients[i][0].send(flag.encode("utf-8"))
 			clients[i][0].sendall(msg.encode("utf-8"))
 			time.sleep(.01)
+	else:
+		for i in range(0, MAX_CLIENTS):
+			if i != sender:
+				clients[i][0].send(b"0")
+			#clients[i][0].send(bytes([msg_len & 0xFFFFFFFF]))
+				clients[i][0].send(msg)
+				time.sleep(.01)
 		
-			
-			
-	
 	sender += 1
 	if sender == MAX_CLIENTS:
-		sender = 0
+            sender = 0
 
 for i in range(0, MAX_CLIENTS):
 	print("Stranger", i+1, "disconnected")
