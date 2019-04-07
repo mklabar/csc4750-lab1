@@ -1,12 +1,17 @@
 from socket import *
+import sys
+
+if len(sys.argv) !=3:
+    print("\nInvalid syntax: please enter the IP address or hostname followed by the port number\n")
+    exit()
 
 #setup socket to connect to server
-serverName = 'localhost'
-serverPort = int(input("Enter port number: "))
+serverName = sys.argv[1]
+serverPort = int(sys.argv[2])
+
 clientSocket = socket(AF_INET, SOCK_STREAM) #TCP socket
 clientSocket.connect((serverName, serverPort))
 
-#receive message from server, print it, close connection
 message = clientSocket.recv(1024).decode('utf-8')
 print(message)
 

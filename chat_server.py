@@ -1,6 +1,6 @@
 from socket import *
 
-MAX_CLIENTS = 3 
+MAX_CLIENTS = 2 
 
 #setup socket to wait for connections
 serverPort = 43500
@@ -8,7 +8,7 @@ serverSocket = socket(AF_INET, SOCK_STREAM) #TCP (reliable)
 serverSocket.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1) #make port reusable
 serverSocket.bind(('', serverPort))
 serverSocket.listen(1)
-print('The server is ready to accept clients')
+print('The server is ready to accept clients on port', serverPort)
 
 clients = []
 #accept up to two connections from clients, which
@@ -29,6 +29,7 @@ msg = ""
 while True:
     clients[sender][0].send(b"1")
     msg = clients[sender][0].recv(1024)
+    senderName = clients[sender]
     
     if msg.decode("utf-8") == "quit":
         break
