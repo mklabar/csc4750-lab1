@@ -8,7 +8,7 @@ serverSocket = socket(AF_INET, SOCK_STREAM) #TCP (reliable)
 serverSocket.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1) #make port reusable
 serverSocket.bind(('', serverPort))
 serverSocket.listen(1)
-print('The server is ready to accept clients')
+print('The server is ready to accept clients on port', serverPort)
 
 clients = []
 #accept up to two connections from clients, which
@@ -29,6 +29,7 @@ msg = ""
 while True:
     clients[sender][0].send(b"1")
     msg = clients[sender][0].recv(1024)
+    senderName = clients[sender]
     
     if msg.decode("utf-8") == "quit":
         break
@@ -44,7 +45,7 @@ while True:
 
 for i in range(0, MAX_CLIENTS):
     print("Stranger", i+1, "disconnected")
-    clients[i][0].send(b"-1")
+    clients[i][0].send(b"2")
     clients[i][0].send(b"You have been disconnected from the chatroom")
     clients[i][0].close()
 
