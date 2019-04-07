@@ -1,3 +1,4 @@
+# csc4750-lab1
 Chatty Master 
 
 Chatty Master is a Client to Server chat program that allows users to send and receive messages directly.

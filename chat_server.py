@@ -2,6 +2,7 @@ from socket import *
 from struct import *
 import random
 import time
+
 MAX_CLIENTS = 2 
 
 #setup socket to wait for connections
@@ -10,7 +11,9 @@ serverSocket = socket(AF_INET, SOCK_STREAM) #TCP (reliable)
 serverSocket.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1) #make port reusable
 serverSocket.bind(('', serverPort))
 serverSocket.listen(1)
-print('The server is ready to accept clients')
+
+print('The server is ready to accept clients on port', serverPort)
+
 
 clients = []
 quotes = ["Who's ready to fly on a zipline? I am!",
