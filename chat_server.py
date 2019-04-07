@@ -2,8 +2,8 @@ from socket import *
 from struct import *
 import random
 import time
-
-MAX_CLIENTS = 2 
+import datetime
+ 
 
 #setup socket to wait for connections
 serverPort = 43500
@@ -11,8 +11,8 @@ serverSocket = socket(AF_INET, SOCK_STREAM) #TCP (reliable)
 serverSocket.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1) #make port reusable
 serverSocket.bind(('', serverPort))
 serverSocket.listen(1)
-
-print('The server is ready to accept clients on port', serverPort)
+MAX_CLIENTS = int(input("Please enter the number of expected clients: "))
+print('The server is ready to accept', MAX_CLIENTS, 'clients on port', serverPort)
 
 
 clients = []
@@ -63,11 +63,16 @@ while True:
 	
 	if msg_dc[0:5] == "!bot ":
 		if "quote" in msg_dc:
-			quote = quotes[random.randint(0,11)]
-			for i in range(0, MAX_CLIENTS):
-				clients[i][0].send(b"3")
-				clients[i][0].sendall(quote.encode("utf-8"))
-				time.sleep(.01)
+			msg = quotes[random.randint(0,11)]
+		elif "time" in msg_dc:
+			msg = str(datetime.datetime.now())
+		for i in range(0, MAX_CLIENTS):
+			clients[i][0].send(b"3")
+			clients[i][0].sendall(msg.encode("utf-8"))
+			time.sleep(.01)
+		
+			
+			
 	
 	sender += 1
 	if sender == MAX_CLIENTS:
