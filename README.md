@@ -8,27 +8,27 @@ Chatty Master can be used with an unlimited amount of clients in the same chat r
 
 Chatty Master uses the module `pyspellchecker`. To install this module follow these instructions:
 
-\1. If you already have `pip` installed, skip this step. To install `pip` first update your Linux version to 18.04:
+1. If you already have `pip` installed, skip this step. To install `pip` first update your Linux version to 18.04:
 	
-	$sudo apt update
+		$sudo apt update
 
-To install `pip`:
+	To install `pip`:
 
-	$sudo apt install python3-pip
+		$sudo apt install python3-pip
 
-To double check you have the correct version of `pip`:
+	To double check you have the correct version of `pip`:
 
-	$pip3 --version
+		$pip3 --version
 
-Output may look something like this:
+	Output may look something like this:
 
-	pip 9.01 from /usr/lib/python3/dist-packages (python 3.6)
+		pip 9.01 from /usr/lib/python3/dist-packages (python 3.6)
 
-\2. To install `pyspellchecker`:
+2. To install `pyspellchecker`:
 
-	$pip3 install pyspellchecker
+		$pip3 install pyspellchecker
 
-If you run into any issues, the github for `pyspellchecker` can be found [here.](https://github.com/barrust/pyspellchecker)
+	If you run into any issues, the github for `pyspellchecker` can be found [here.](https://github.com/barrust/pyspellchecker)
 
 ## Server Configuration:
 
@@ -40,8 +40,6 @@ Chatty Master can be used with any number of clients! When running the server, y
 
 To connect a client to the server via command line, you must specify the connection (IP or host name is acceptable) and the port number.
 
-Example:
-
 #### Connecting with IP:
 	
 	$python3 chat_client.py 127.0.0.1 43500
@@ -52,14 +50,14 @@ Example:
 
 ## Command List:
 	
-	/help displays the command list and !bot list
-	/quit disconnects all clients from chat room
+	`/help` displays the command list and !bot list
+	`/quit` disconnects all clients from chat room
 
 ## Bot List:
 
-Type !bot to interact with our friendly Chatty bot!
+Type !bot to interact with our friendly Chatty Bot!
 
-	!bot quote to receive a random quote from a famous robot
-	!bot spellcheck to receive a spelling lesson
-	!bot time to find out the current time
+	`!bot quote` Chatty Bot quotes a famous robot
+	`!bot spellcheck` Chatty Bot gives spelling recommendations for a single word
+	`!bot time` Chatty Bot tells the current time
 
