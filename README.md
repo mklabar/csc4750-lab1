@@ -49,13 +49,16 @@ To connect a client to the server via command line, you must specify the connect
 ## Command List:
 	
    `/help` displays the command list and !bot list
+  
    `/quit` disconnects all clients from chat room
 
 ## Bot List:
 
 Type !bot to interact with our friendly Chatty Bot!
-   
+      
    `!bot quote` Chatty Bot quotes a famous robot
+
    `!bot spellcheck` Chatty Bot gives spelling recommendations for a single word
+  
    `!bot time` Chatty Bot tells the current time
 
