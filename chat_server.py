@@ -3,7 +3,7 @@ from struct import *
 import random
 import time
 import datetime
- 
+from spellchecker import SpellChecker
 
 #setup socket to wait for connections
 serverPort = 43500
@@ -14,7 +14,7 @@ serverSocket.listen(1)
 MAX_CLIENTS = int(input("Please enter the number of expected clients: "))
 print('The server is ready to accept', MAX_CLIENTS, 'clients on port', serverPort)
 
-
+spell = SpellChecker()
 clients = []
 quotes = ["Who's ready to fly on a zipline? I am!",
  "Shut up baby I know it!",
@@ -59,18 +59,21 @@ while True:
 			msg = "\n\tCommands:\n\n\t\t/help\tdisplays the list of commands\
 			\n\t\t/quit\tdisconnects all clients from the server\
 			\n\n\tBot Commands:\n\n\t\t!bot quote\tChatty Bot says a famous robot quote\
-			\n\t\t!bot time\tChatty Bot tells the current time\n"
+			\n\t\t!bot time\tChatty Bot tells the current time\n\
+			!bot spellcheck\tChatty bot accepts one word and gives you corrected word recommendations\n"
 		elif msg_dc[0:5] == "!bot ":
 			flag = "4"
 			if "quote" in msg_dc:
 				msg = quotes[random.randint(0,11)]
 			elif "time" in msg_dc:
 				msg = "The current time is " + datetime.datetime.now().strftime("%I:%M %p")
-			
-			#elif "spellcheck" goes here
-				#do spellcheck stuff
-				#msg = blah
-				
+			elif "spellcheck" in msg_dc:
+				msg_array = msg_dc.split()
+				misspelled = spell.unknown(msg_array)
+				candidates = spell.candidates(msg_array[2])
+				msg = "You may mean"
+				for word in candidates:
+					msg = msg + " " + word
 			else:
 				msg = "I'm sorry, I don't know that command yet!\
 				Type '/help' for a list of commands"
