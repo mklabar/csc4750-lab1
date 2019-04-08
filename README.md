@@ -1,6 +1,6 @@
 # Chatty Master 
 > created by Kieran Jackson and Mary Kate La Bar
-
+>
 > CSC 4750 Lab 1
 
 Chatty Master is a Client to Server chat program that allows users to send and receive messages directly. Chatty Master can be used with an unlimited amount of clients in the same chat room! The server keeps an ordered list of all the clients connected. The server then cycles through the list in order to determine whose turn it is to send a message. Clients cannot send messages willy-nilly! They must wait. When it is a client's turn to send a message the server will notify the client behind the scenes, and the client will prompt the user to send a message.
